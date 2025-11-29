@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define ROW 5
+#define COL 5
+
 typedef struct {
     char namaPemesan[50];
     char film[50];
