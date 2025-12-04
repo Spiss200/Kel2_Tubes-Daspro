@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define ROW 5
+#define COL 5
+
 typedef struct {
     char namaPemesan[50];
     char film[50];
@@ -13,17 +16,31 @@ typedef struct {
     int totalHarga;
 } Ticket;
 
+int seats[10][3][7][ROW][COL];
+
+void tampilSeat(int film, int studio, int tanggal) {
+    printf("\=== LAYOUT KURSI ===\n");
+    printf("  1  2  3  4  5\n");
+
+    for (int i = 0; I < ROW; i++) {
+        printf("%c ", 'A' + i);
+        for (int j = 0; j < COL; j++) {
+            if (seats[film][studio][tanggal][i][j] == 0) printf("[0]");
+            else printf("[X]");
+        }
+        printf("\n");
+    }  
+}
+
 int main() {
     int pilihanFilm, pilihanStudio, pilihanTanggal, pilihanJadwal;
 
     Ticket t;
 
-    //  NAMA PEMESAN 
     printf("=== SELAMAT DATANG ===\n");
     printf("Masukkan nama Anda: ");
     scanf(" %[^\n]", t.namaPemesan);
 
-    //  PILIH FILM 
     printf("\n=== PILIH FILM ===\n");
     printf("1. Avengers: Endgame\n");
     printf("2. Interstellar\n");
@@ -54,7 +71,6 @@ int main() {
     };
     strcpy(t.film, daftarFilm[pilihanFilm]);
 
-    // PILIH STUDIO 
     printf("\n=== PILIH STUDIO ===\n");
     printf("1. Reguler (35000)\n");
     printf("2. Dolby Atmos (50000)\n");
@@ -69,8 +85,7 @@ int main() {
 
     strcpy(t.studio, namaStudio[pilihanStudio]);
     t.harga = hargaStudio[pilihanStudio];
-
-    //  PILIH HARI & TANGGAL 
+ 
     char tanggal[7][40] = {
         "Senin, 1 Des 2025",
         "Selasa, 2 Des 2025",
@@ -91,7 +106,6 @@ int main() {
 
     strcpy(t.hariTanggal, tanggal[pilihanTanggal]);
 
-    // PILIH JADWAL
     printf("\n=== PILIH JADWAL ===\n");
     printf("1. 12:00\n");
     printf("2. 15:00\n");
@@ -104,6 +118,40 @@ int main() {
     char jadwalFilm[4][20] = {"12:00", "15:00", "19:00", "21:00"};
     strcpy(t.jadwal, jadwalFilm[pilihanJadwal - 1]);
 
+    printf("\nBerapa kursi yang ingin dipesan? ");
+    scanf("%d", &t.jumlahKursi);
+    
+    tampilSeat(pilihanFilm, pilihanStudio, pilihanTanggal);
+
+    for (int i = 0; i < t.jumlahKursi; i++) {
+        int row, col;
+        char huruf;
+
+        printf("\nPilih Kursi %d (format: A1, B3, dst): ", i+1);
+
+        printf("Baris (A-E): ");
+        scanf("%d", &col);
+        col--;
+
+         if (seats[pilihanFilm][pilihanStudio][pilihanTanggal][row][col] == 1) {
+            printf("Seat sudah terisi! Pilih kursi lain.\n");
+            i--;
+            continue;
+        }
+
+        seats[pilihanFilm][pilihanStudio][pilihanTanggal][row][col] = 1;
+
+        sprintf(t.kursiDipilih[i], "%c%d", huruf, col+1);
+    }
+
+    t.totalHarga = t.harga * t.jumlahKursi;
+
+    printf("\nKursi yang dipilih: ");
+    for (int i = 0; i < t.jumlahKursi; i++)
+        printf("%s ", t.kursiDipilih[i]);
+
+    printf("\nTotal Harga: Rp %d\n", t.totalHarga);
+
     printf("\nData telah dipilih:\n");
     printf("Nama: %s\n", t.namaPemesan);
     printf("Film: %s\n", t.film);
@@ -111,6 +159,7 @@ int main() {
     printf("Tanggal: %s\n", t.hariTanggal);
     printf("Jadwal: %s\n", t.jadwal);
     printf("Harga: %d\n", t.harga);
+
 
     return 0;
 }
