@@ -32,6 +32,46 @@ void tampilSeat(int film, int studio, int tanggal) {
     }  
 }
 
+void simpanTiket(Ticket t) {
+    char filename[150];
+    char namaPemesanShort[20];
+    char filShort[20];
+
+    strncpy(namaPemesanShort, t.namaPemesan, sizeof(namaPemesanShort) - 1);
+    namaPemesanShort[sizeof(namaPemesanShort) - 1] = '\0';
+
+    strncpy(filmShort, t.film, sizeof(filmShort) - 1);
+    filmShort[sizeof(filmShort) - 1] = '\0';
+
+    sprintf(filename, "tiket_%s_%s.txt", namaPemesanShort, filmShort);
+
+    for (int i = 0; filenam[i] != '\0'; i++){
+        if(filename[i] == '') filename[i] = '_';
+            }
+FILE *file = fopen(filename, "a");
+
+fprintf(file, "\n=== TIKET BIOSKOP ===\n");
+fprintf(file, "Nama Pemesan:%s\n", t.namaPemesan);
+fprintf(file, "Film    : %s\n", t.film);
+fprintf(file, "Studio    : %s\n", t.studio);
+fprintf(file, "Hari/Tanggal : %s\n", t.hariTanggal);
+fprintf(file, "Jadwal    : %s\n", t.jadwal);
+
+fprintf(file, "Kursi"    :);
+for ( int i = 0; i < t.jumlahKursi; i++){
+    fprintf(file, "%s"' t.kursiDipilih[i]
+        }
+fprintf(file, "\n");
+
+fprintf(file, "Harga per kursi : Rp %d\n", t.harga);
+fprintf(file, "Total Harga : RP %d\n", t.totalHarga);
+fprintf(file, "------------------------\n");
+
+fclose(file);
+
+printf("\nTiket berhasil disimpan ke '%s'!\n", filename);
+}
+
 int main() {
     int pilihanFilm, pilihanStudio, pilihanTanggal, pilihanJadwal;
 
@@ -130,6 +170,11 @@ int main() {
         printf("\nPilih Kursi %d (format: A1, B3, dst): ", i+1);
 
         printf("Baris (A-E): ");
+        scanf("%c", &huruf);
+        if (huruf >= 'a' &&huruf <= 'e') huruf -= 32;
+        row = huruf - 'A';
+
+        printf("Kolom (1-5)");
         scanf("%d", &col);
         col--;
 
@@ -145,6 +190,11 @@ int main() {
     }
 
     t.totalHarga = t.harga * t.jumlahKursi;
+
+    simpanYiket(t);
+
+    printf("\n=== PEMESANAN BERHASIL ===\n");
+    printf("Nama Pemesan:%s\n", t.namaPemesan
 
     printf("\nKursi yang dipilih: ");
     for (int i = 0; i < t.jumlahKursi; i++)
