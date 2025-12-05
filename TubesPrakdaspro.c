@@ -18,6 +18,61 @@ typedef struct {
 
 int seats[10][3][7][ROW][COL];
 
+void isiDataAwal(){
+     // Film 0 - Avengers:Endgame
+    seats[0][0][0][0][1] = 1;
+    seats[0][0][0][1][2] = 1;
+    seats[0][0][0][2][0] = 1;
+    seats[0][0][0][2][1] = 1;
+    seats[0][0][0][2][2] = 1;
+    seats[0][0][0][3][3] = 1;
+    seats[0][0][0][4][4] = 1;
+
+    // Film 1 - interstellar
+    seats[1][0][0][1][1] = 1;
+
+    // Film 2 - Inside Out 2
+    seats[2][0][0][0][0] = 1;
+    seats[2][0][0][4][0] = 1;
+
+    // Film 3 - Dune: Part Two
+    seats[3][0][0][1][1] = 1;
+    seats[3][0][0][1][2] = 1;
+    seats[3][0][0][2][1] = 1;
+    seats[3][0][0][3][2] = 1;
+    seats[3][0][0][3][3] = 1;
+
+    // Film 4 - Joker: Folie à Deux
+    seats[4][0][0][0][2] = 1;
+    seats[4][0][0][1][2] = 1;
+    seats[4][0][0][2][2] = 1;
+    seats[4][0][0][3][2] = 1;
+    seats[4][0][0][4][2] = 1;
+
+    // Film 5 - Inside Out 3
+    seats[5][0][0][2][2] = 1;
+
+    // Film 6 - Wicked
+    seats[6][0][0][1][0] = 1;
+    seats[6][0][0][1][4] = 1;
+
+    // Film 7 - Moana 2
+    seats[7][0][0][0][4] = 1;
+    seats[7][0][0][4][0] = 1;
+
+    // Film 8 - Gladiator 2
+    seats[8][0][0][0][0] = 1;
+    seats[8][0][0][1][1] = 1;
+    seats[8][0][0][2][2] = 1;
+    seats[8][0][0][3][3] = 1;
+    seats[8][0][0][4][4] = 1;
+
+    // Film 9 - Sonic 3
+    seats[9][0][0][0][1] = 1;
+    seats[9][0][0][1][3] = 1;
+    seats[9][0][0][2][1] = 1;
+}
+
 void tampilSeat(int film, int studio, int tanggal) {
     printf("\=== LAYOUT KURSI ===\n");
     printf("  1  2  3  4  5\n");
@@ -30,6 +85,11 @@ void tampilSeat(int film, int studio, int tanggal) {
         }
         printf("\n");
     }  
+}
+
+void lihatKursi(int film, int studio, int tanggal){
+    printf("\n=== KURSI YANG SUDAH TERISI ===\n");
+    tampilSeat(film,studio,tanggal);
 }
 
 void simpanTiket(Ticket t) {
@@ -76,6 +136,8 @@ int main() {
     int pilihanFilm, pilihanStudio, pilihanTanggal, pilihanJadwal;
 
     Ticket t;
+    memset(seats, 0, sizeof(seats));
+    isiDataAwal();
 
     printf("=== SELAMAT DATANG ===\n");
     printf("Masukkan nama Anda: ");
@@ -94,7 +156,10 @@ int main() {
     printf("10. Sonic 3\n");
 
     printf("Pilihan: ");
-    scanf("%d", &pilihanFilm);
+    while (scanf("%d", &pilihanFilm) !=1 || pilihanFilm < 1 || pilihanFilm > 10){
+        printf("Input tidak valid! Masukkan angka 1-10:");
+        while(getchar() !='\n');
+    }
     pilihanFilm--;
 
     char daftarFilm[10][50] = {
@@ -117,7 +182,10 @@ int main() {
     printf("3. IMAX (70000)\n");
 
     printf("Pilihan: ");
-    scanf("%d", &pilihanStudio);
+    while (scanf("%d", &pilihanStudio) != 1 || pilihanStudio  < 1 || pilihanStudio > 3){
+        printf("Input tidak valid! Masukkan angka 1-3:");
+        while(getchar() !='\n';
+    }
     pilihanStudio--;
 
     char namaStudio[3][20] = {"Reguler", "Dolby Atmos", "IMAX"};
@@ -141,7 +209,10 @@ int main() {
         printf("%d. %s\n", i+1, tanggal[i]);
 
     printf("Pilihan: ");
-    scanf("%d", &pilihanTanggal);
+    while (scanf("%d", &pilihanTanggal) != 1 || pilihanTanggal < 1 || pilihanTanggal > 7){
+        printf("Input tidak valid! Masukkan angka 1-7:");
+        while (getchar() != '\n');
+    }
     pilihanTanggal--;
 
     strcpy(t.hariTanggal, tanggal[pilihanTanggal]);
@@ -153,13 +224,35 @@ int main() {
     printf("4. 21:00\n");
 
     printf("Pilihan: ");
-    scanf("%d", &pilihanJadwal);
+    while (scanf("%d", &pilihanJadwal) != 1 || pilihanJadwal < 1 || pilihanJadwal > 4){
+        printf("Input tidak valid! Masukkan angka 1-4:");
+        while (getchar() != '\n';
+    }
 
     char jadwalFilm[4][20] = {"12:00", "15:00", "19:00", "21:00"};
     strcpy(t.jadwal, jadwalFilm[pilihanJadwal - 1]);
 
     printf("\nBerapa kursi yang ingin dipesan? ");
-    scanf("%d", &t.jumlahKursi);
+    while (scanf("%d", &t.jumlahKursi) != 1 || t.jumlahKursi < 1 || t.jumlahKursi > 25){
+        printf("Jumlah kursi harus 1-25. Coba lagi:");
+        while (getchar() !='\n');
+    }
+
+    int menu;
+    while(1){
+        printf("\n=== MENU SEBELUM BOOKING ===\n");
+        printf("1.Lanjut pilih kursi\n");
+        printf("2.Lihat kursi terisi\n);
+        printf("Pilihan:");
+
+        while (scanf("%d",&menu) != 1 || menu < 1 || menu > 2){
+            printf("Input tidak valid! Pilih 1 atau 2:");
+            while (getchar() !='\n';
+        }
+
+        if(menu == 1)break;
+        else lihatKursi(pilihanFilm, pilihanStudio, pilihanTanggal);
+    }
     
     tampilSeat(pilihanFilm, pilihanStudio, pilihanTanggal);
 
@@ -170,12 +263,19 @@ int main() {
         printf("\nPilih Kursi %d (format: A1, B3, dst): ", i+1);
 
         printf("Baris (A-E): ");
-        scanf("%c", &huruf);
+        while(scanf("%c", &huruf) != 1 || !((huruf >= 'A' && huruf <= 'E') || (huruf >= 'a' && huruf <= 'e'))){
+            printf("Baris tidak valid! Masukkan A-E:");
+            while (getchar() !='\n';
+        }
+            
         if (huruf >= 'a' &&huruf <= 'e') huruf -= 32;
         row = huruf - 'A';
 
         printf("Kolom (1-5)");
-        scanf("%d", &col);
+        while(scanf("%d", &col) != 1 || col < 1 || col > 5){
+            printf("Kolom tidak valid! Masukkan 1-5:");
+            while (getchar() !='\n');
+        }
         col--;
 
          if (seats[pilihanFilm][pilihanStudio][pilihanTanggal][row][col] == 1) {
