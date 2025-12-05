@@ -305,26 +305,13 @@ int main() {
         printf("%s", t.kursiDipilih[i];
 
     printf("\nHarga per kursi : Rp %d\n", t.harga);
-    printf("Total Harga : Rp %d\n", t.totalHarga);
+    printf("Total Harga       : Rp %d\n", t.totalHarga);
 
-    printf("\nTerima kasih telah memesan tiket!\n");
+    printf("\n=== POSISI KURSI ANDA ===\n");
+    tampilSeat(pilihanFilm, pilihanStudio, pilihanTanggal);
     
-    printf("\nKursi yang dipilih: ");
-    for (int i = 0; i < t.jumlahKursi; i++)
-        printf("%s ", t.kursiDipilih[i]);
-
-    printf("\nTotal Harga: Rp %d\n", t.totalHarga);
-
-    printf("\nData telah dipilih:\n");
-    printf("Nama: %s\n", t.namaPemesan);
-    printf("Film: %s\n", t.film);
-    printf("Studio: %s\n", t.studio);
-    printf("Tanggal: %s\n", t.hariTanggal);
-    printf("Jadwal: %s\n", t.jadwal);
-    printf("Harga: %d\n", t.harga);
-
+    printf("\nTerima kasih telah memesan tiket!\n");
 
     return 0;
-}
     
 }
