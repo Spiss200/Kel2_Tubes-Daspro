@@ -191,11 +191,24 @@ int main() {
 
     t.totalHarga = t.harga * t.jumlahKursi;
 
-    simpanYiket(t);
+    simpanTiket(t);
 
     printf("\n=== PEMESANAN BERHASIL ===\n");
-    printf("Nama Pemesan:%s\n", t.namaPemesan
+    printf("Nama Pemesan:%s\n", t.namaPemesan);
+    printf("Film    :%s\n", t.film);
+    printf("Studio    :%s\n", t.studio);
+    printf("Tanggal    :%s\n", t.hariTanggal);
+    printf("Jadwal    :%s\n", t.jadwal);
 
+    printf("Kursi    :");
+    for (int i = 0; i < t.jumlahKursi; i++)
+        printf("%s", t.kursiDipilih[i];
+
+    printf("\nHarga per kursi : Rp %d\n", t.harga);
+    printf("Total Harga : Rp %d\n", t.totalHarga);
+
+    printf("\nTerima kasih telah memesan tiket!\n");
+    
     printf("\nKursi yang dipilih: ");
     for (int i = 0; i < t.jumlahKursi; i++)
         printf("%s ", t.kursiDipilih[i]);
