@@ -10,7 +10,7 @@ typedef struct {
     char studio[20];
     char jadwal[20];
     char hariTanggal[40];
-    char kursiDipilih[30][3];  
+    char kursiDipilih[30][4];  
     int jumlahKursi;
     int harga;
     int totalHarga;
@@ -19,6 +19,7 @@ typedef struct {
 int seats[10][3][7][ROW][COL];
 
 void isiDataAwal(){
+    memset(seats, 0, sizeof(seats)); 
      // Film 0 - Avengers:Endgame
     seats[0][0][0][0][1] = 1;
     seats[0][0][0][1][2] = 1;
@@ -42,7 +43,7 @@ void isiDataAwal(){
     seats[3][0][0][3][2] = 1;
     seats[3][0][0][3][3] = 1;
 
-    // Film 4 - Joker: Folie à Deux
+    // Film 4 - Zootopia 2
     seats[4][0][0][0][2] = 1;
     seats[4][0][0][1][2] = 1;
     seats[4][0][0][2][2] = 1;
@@ -103,27 +104,31 @@ void simpanTiket(Ticket t) {
     strncpy(filmShort, t.film, sizeof(filmShort) - 1);
     filmShort[sizeof(filmShort) - 1] = '\0';
 
-    sprintf(filename, "tiket_%s_%s.txt", namaPemesanShort, filmShort);
-
+   snprintf(filename, sizeof(filename), "tiket_%s_%s.txt", namaPemesanShort, filmShort);
+    
     for (int i = 0; filename[i] != '\0'; i++){
-        if(filename[i] == '') filename[i] = '_';
+        if(filename[i] == ' ') filename[i] = '_';
     }
+    
 FILE *file = fopen(filename, "a");
-
+if (file == NULL) {                  
+    printf("Gagal membuka file!\n");
+    return;
+}
 fprintf(file, "\n=== TIKET BIOSKOP ===\n");
-fprintf(file, "Nama Pemesan:%s\n", t.namaPemesan);
-fprintf(file, "Film        : %s\n", t.film);
-fprintf(file, "Studio      : %s\n", t.studio);
-fprintf(file, "Hari/Tanggal: %s\n", t.hariTanggal);
-fprintf(file, "Jadwal      : %s\n", t.jadwal);
-fprintf(file, "Kursi       : ");
+fprintf(file, "Nama Pemesan        : %s\n", t.namaPemesan);
+fprintf(file, "Film                : %s\n", t.film);
+fprintf(file, "Studio              : %s\n", t.studio);
+fprintf(file, "Hari/Tanggal        : %s\n", t.hariTanggal);
+fprintf(file, "Jadwal              : %s\n", t.jadwal);
+fprintf(file, "Kursi               : ");
 for ( int i = 0; i < t.jumlahKursi; i++){
-    fprintf(file, "%s"' t.kursiDipilih[i]
+    fprintf(file, "%s ", t.kursiDipilih[i]);
 }
 fprintf(file, "\n");
 
-fprintf(file, "Harga per kursi : Rp %d\n", t.harga);
-fprintf(file, "Total Harga     : RP %d\n", t.totalHarga);
+fprintf(file, "Harga kursi         : Rp %d\n", t.harga);
+fprintf(file, "Total Harga         : RP %d\n", t.totalHarga);
 fprintf(file, "------------------------\n");
 
 fclose(file);
@@ -135,7 +140,8 @@ int main() {
     int pilihanFilm, pilihanStudio, pilihanTanggal, pilihanJadwal;
 
     Ticket t;
-    memset(seats, 0, sizeof(seats));
+    memset(&t, 0, sizeof(Ticket));
+    
     isiDataAwal();
 
     printf("=== SELAMAT DATANG ===\n");
@@ -147,7 +153,7 @@ int main() {
     printf("2. Interstellar\n");
     printf("3. Inside Out 2\n");
     printf("4. Dune: Part Two\n");
-    printf("5. Joker: Folie à Deux\n");
+    printf("5. Zootopia 2\n");
     printf("6. Inside Out 3\n");
     printf("7. Wicked\n");
     printf("8. Moana 2\n");
@@ -166,7 +172,7 @@ int main() {
         "Interstellar",
         "Inside Out 2",
         "Dune: Part Two",
-        "Joker: Folie à Deux",
+        "Zootopia 2",
         "Inside Out 3",
         "Wicked",
         "Moana 2",
@@ -183,7 +189,7 @@ int main() {
     printf("Pilihan: ");
     while (scanf("%d", &pilihanStudio) != 1 || pilihanStudio  < 1 || pilihanStudio > 3){
         printf("Input tidak valid! Masukkan angka 1-3:");
-        while(getchar() !='\n';
+        while(getchar() !='\n');
     }
     pilihanStudio--;
 
@@ -222,14 +228,15 @@ int main() {
     printf("3. 19:00\n");
     printf("4. 21:00\n");
 
+    char jadwalFilm[4][20] = {"12:00", "15:00", "19:00", "21:00"};
+
     printf("Pilihan: ");
     while (scanf("%d", &pilihanJadwal) != 1 || pilihanJadwal < 1 || pilihanJadwal > 4){
-        printf("Input tidak valid! Masukkan angka 1-4:");
-        while (getchar() != '\n';
-    }
-
-    char jadwalFilm[4][20] = {"12:00", "15:00", "19:00", "21:00"};
-    strcpy(t.jadwal, jadwalFilm[pilihanJadwal - 1]);
+    printf("Input tidak valid! Masukkan angka 1-4:");
+    while (getchar() != '\n');
+}
+    pilihanJadwal--;               
+    strcpy(t.jadwal, jadwalFilm[pilihanJadwal]);
 
     printf("\nBerapa kursi yang ingin dipesan? ");
     while (scanf("%d", &t.jumlahKursi) != 1 || t.jumlahKursi < 1 || t.jumlahKursi > 25){
@@ -240,13 +247,13 @@ int main() {
     int menu;
     while(1){
         printf("\n=== MENU SEBELUM BOOKING ===\n");
-        printf("1.Lanjut pilih kursi\n");
-        printf("2.Lihat kursi terisi\n);
+        printf("1. Lanjut pilih kursi\n");
+        printf("2. Lihat kursi terisi\n");
         printf("Pilihan:");
 
         while (scanf("%d",&menu) != 1 || menu < 1 || menu > 2){
             printf("Input tidak valid! Pilih 1 atau 2:");
-            while (getchar() !='\n';
+            while (getchar() !='\n');
         }
 
         if(menu == 1)break;
@@ -262,16 +269,16 @@ int main() {
         printf("\nPilih Kursi %d (format: A1, B3, dst): ", i+1);
 
         printf("Baris (A-E): ");
-        while(scanf("%c", &huruf) != 1 || !((huruf >= 'A' && huruf <= 'E') || (huruf >= 'a' && huruf <= 'e'))){
+        while(scanf(" %c", &huruf) != 1 || !((huruf >= 'A' && huruf <= 'E') || (huruf >= 'a' && huruf <= 'e'))){
             printf("Baris tidak valid! Masukkan A-E:");
-            while (getchar() !='\n';
+            while (getchar() !='\n');
         }
             
         if (huruf >= 'a' &&huruf <= 'e') 
             huruf -= 32;
         row = huruf - 'A';
 
-        printf("Kolom (1-5)");
+        printf("Kolom (1-5):");
         while(scanf("%d", &col) != 1 || col < 1 || col > 5){
             printf("Kolom tidak valid! Masukkan 1-5:");
             while (getchar() !='\n');
@@ -286,7 +293,9 @@ int main() {
 
         seats[pilihanFilm][pilihanStudio][pilihanTanggal][row][col] = 1;
 
-        sprintf(t.kursiDipilih[i], "%c%d", huruf, col+1);
+        snprintf(t.kursiDipilih[i], sizeof(t.kursiDipilih[i]),
+         "%c%d", huruf, col + 1);
+
     }
 
     t.totalHarga = t.harga * t.jumlahKursi;
@@ -302,12 +311,11 @@ int main() {
 
     printf("Kursi       :");
     for (int i = 0; i < t.jumlahKursi; i++)
-        printf("%s", t.kursiDipilih[i];
+        printf("%s ", t.kursiDipilih[i]);
 
     printf("\nHarga per kursi : Rp %d\n", t.harga);
     printf("Total Harga       : Rp %d\n", t.totalHarga);
 
-    printf("\n=== POSISI KURSI ANDA ===\n");
     tampilSeat(pilihanFilm, pilihanStudio, pilihanTanggal);
     
     printf("\nTerima kasih telah memesan tiket!\n");
