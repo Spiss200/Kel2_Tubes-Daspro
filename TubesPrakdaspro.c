@@ -10,7 +10,7 @@ typedef struct {
     char studio[20];
     char jadwal[20];
     char hariTanggal[40];
-    char kursiDipilih[30][4];  
+    char kursiDipilih[30][5];  
     int jumlahKursi;
     int harga;
     int totalHarga;
@@ -18,60 +18,20 @@ typedef struct {
 
 int seats[10][3][7][ROW][COL];
 
-void isiDataAwal(){
-    memset(seats, 0, sizeof(seats)); 
-     // Film 0 - Avengers:Endgame
-    seats[0][0][0][0][1] = 1;
-    seats[0][0][0][1][2] = 1;
-    seats[0][0][0][2][0] = 1;
-    seats[0][0][0][2][1] = 1;
-    seats[0][0][0][2][2] = 1;
-    seats[0][0][0][3][3] = 1;
-    seats[0][0][0][4][4] = 1;
+void isiDataAwal(int s[ROW][COL]) {
+    for (int i = 0; i < ROW; i++) {
+        for (int j = 0; j < COL; j++) {
+            s[i][j] = 0;
+        }
+    }
 
-    // Film 1 - interstellar
-    seats[1][0][0][1][1] = 1;
-
-    // Film 2 - Inside Out 2
-    seats[2][0][0][0][0] = 1;
-    seats[2][0][0][4][0] = 1;
-
-    // Film 3 - Dune: Part Two
-    seats[3][0][0][1][1] = 1;
-    seats[3][0][0][1][2] = 1;
-    seats[3][0][0][2][1] = 1;
-    seats[3][0][0][3][2] = 1;
-    seats[3][0][0][3][3] = 1;
-
-    // Film 4 - Zootopia 2
-    seats[4][0][0][0][2] = 1;
-    seats[4][0][0][1][2] = 1;
-    seats[4][0][0][2][2] = 1;
-    seats[4][0][0][3][2] = 1;
-    seats[4][0][0][4][2] = 1;
-
-    // Film 5 - Inside Out 3
-    seats[5][0][0][2][2] = 1;
-
-    // Film 6 - Wicked
-    seats[6][0][0][1][0] = 1;
-    seats[6][0][0][1][4] = 1;
-
-    // Film 7 - Moana 2
-    seats[7][0][0][0][4] = 1;
-    seats[7][0][0][4][0] = 1;
-
-    // Film 8 - Gladiator 2
-    seats[8][0][0][0][0] = 1;
-    seats[8][0][0][1][1] = 1;
-    seats[8][0][0][2][2] = 1;
-    seats[8][0][0][3][3] = 1;
-    seats[8][0][0][4][4] = 1;
-
-    // Film 9 - Sonic 3
-    seats[9][0][0][0][1] = 1;
-    seats[9][0][0][1][3] = 1;
-    seats[9][0][0][2][1] = 1;
+    s[0][1] = 1; // A2
+    s[1][2] = 1; // B3
+    s[2][0] = 1; // C1
+    s[2][1] = 1; // C2
+    s[2][2] = 1; // C3
+    s[3][3] = 1; // D4
+    s[4][4] = 1; // E5
 }
 
 void tampilSeat(int film, int studio, int tanggal) {
@@ -141,8 +101,6 @@ int main() {
 
     Ticket t;
     memset(&t, 0, sizeof(Ticket));
-    
-    isiDataAwal();
 
     printf("=== SELAMAT DATANG ===\n");
     printf("Masukkan nama Anda: ");
@@ -238,6 +196,8 @@ int main() {
     pilihanJadwal--;               
     strcpy(t.jadwal, jadwalFilm[pilihanJadwal]);
 
+    isiDataAwal(seats[pilihanFilm][pilihanStudio][pilihanTanggal]);
+    
     printf("\nBerapa kursi yang ingin dipesan? ");
     while (scanf("%d", &t.jumlahKursi) != 1 || t.jumlahKursi < 1 || t.jumlahKursi > 25){
         printf("Jumlah kursi harus 1-25. Coba lagi:");
@@ -293,8 +253,7 @@ int main() {
 
         seats[pilihanFilm][pilihanStudio][pilihanTanggal][row][col] = 1;
 
-        snprintf(t.kursiDipilih[i], sizeof(t.kursiDipilih[i]),
-         "%c%d", huruf, col + 1);
+        sprintf(t.kursiDipilih[i], "%c%d", huruf, col+1);
 
     }
 
